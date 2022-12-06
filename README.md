@@ -110,6 +110,21 @@ auth = sharepy.auth.SharePointOnline(username="user@example.com")
 auth.login_url = "https://login.microsoftonline.de/extSES.srf"
 s = sharepy.SharePointSession("example.sharepoint.com", auth)
 ```
+### Using a proxy
+
+It is possible to use a proxy for the connection by passing a dictionary containing the connection type and proxy server to the `proxy` property:
+
+```python
+import sharepy
+
+proxies = {
+   'http': 'http://proxy.example.com:8080',
+   'https': 'http://secureproxy.example.com:8090',
+}
+s = sharepy.connect("example.sharepoint.com",proxy=proxies)
+```
+
+
 
 ## Useful reading
 
