@@ -51,7 +51,7 @@ class SharePointADFS(BaseAuth):
                                                             expires=expires.isoformat() + 'Z')
 
         # Request security token from Microsoft Online
-        response = requests.post(self.login_url, data=saml, headers=headers)
+        response = requests.post(self.login_url, data=saml, headers=headers, proxy=self.proxy)
         # Parse and extract assertion from returned XML
         try:
             root = et.fromstring(response.text)
@@ -68,7 +68,7 @@ class SharePointADFS(BaseAuth):
 
         saml = templates.load('adfs-token.saml').format(assertion=assertion,
                                                         endpoint='sharepoint.com')
-        response = requests.post(url=MSO_AUTH_URL, data=saml, headers=headers)
+        response = requests.post(url=MSO_AUTH_URL, data=saml, headers=headers, proxy=self.proxy)
         # Parse and extract token from returned XML
         try:
             root = et.fromstring(response.text)
@@ -84,7 +84,7 @@ class SharePointADFS(BaseAuth):
         headers = {'Authorization': 'BPOSIDCRL ' + self.token,
                    'X-IDCRL_ACCEPTED': 't',
                    'User-Agent': ''}
-        response = requests.get(url=idcrl_url, headers=headers)
+        response = requests.get(url=idcrl_url, headers=headers, proxy=self.proxy)
 
         if response.status_code == requests.codes.ok:
             # Add the IDCRL cookie to the session
@@ -105,7 +105,7 @@ class SharePointADFS(BaseAuth):
                         'Cookie': self.cookie,
                         'X-RequestForceAuthentication': 'true'})
             digest_envelope = templates.load('adfs-digest.saml')
-            response = requests.post(request_url, data=digest_envelope, headers=headers)
+            response = requests.post(request_url, data=digest_envelope, headers=headers, proxy=self.proxy)
 
             # Parse digest text and timeout from XML
             try:

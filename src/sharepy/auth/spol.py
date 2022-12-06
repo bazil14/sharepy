@@ -54,13 +54,13 @@ class SharePointOnline(BaseAuth):
     def _get_cookie(self):
         """Request access cookie from sharepoint site"""
         cookie_url = f'https://{self.site}/_forms/default.aspx?wa=wsignin1.0'
-        response = requests.post(cookie_url, data=self.token, headers={'Host': self.site})
+        response = requests.post(cookie_url, data=self.token, headers={'Host': self.site}, proxy=self.proxy)
 
         # Create access cookie from returned headers
         cookie = self._buildcookie(response.cookies)
         # Verify access by requesting page
         test_url = f'https://{self.site}/_api/web'
-        response = requests.get(test_url, headers={'Cookie': cookie})
+        response = requests.get(test_url, headers={'Cookie': cookie}, proxy=self.proxy)
 
         if response.status_code == requests.codes.ok:
             self.cookie = cookie
@@ -72,7 +72,7 @@ class SharePointOnline(BaseAuth):
         if self.expire <= datetime.now():
             # Request site context info from SharePoint site
             digest_url = f'https://{self.site}/_api/contextinfo'
-            response = requests.post(digest_url, data='', headers={'Cookie': self.cookie})
+            response = requests.post(digest_url, data='', headers={'Cookie': self.cookie}, proxy=self.proxy)
             # Parse digest text and timeout from XML
             try:
                 root = et.fromstring(response.text)

@@ -5,9 +5,10 @@ class BaseAuth(RequestsAuth):
     """A base interface that all SharePy auth classes should inherit from"""
     site = None
 
-    def __init__(self, username, password=None, login_url=None):
+    def __init__(self, username, password=None, proxy=None, login_url=None):
         self.username = username
         self.password = password
+        self.proxy = proxy
         self.login_url = login_url
         self.cookie = None
         self.digest = None

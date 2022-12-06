@@ -9,9 +9,9 @@ from . import auth
 from . import errors
 
 
-def connect(site, username=None, password=None):
+def connect(site, username=None, password=None, proxy=None):
     username = username or input('Enter your username: ')
-    autoauth = auth.detect(username=username, password=password)
+    autoauth = auth.detect(username=username, password=password,proxy=proxy)
     return SharePointSession(site, auth=autoauth)
 
 

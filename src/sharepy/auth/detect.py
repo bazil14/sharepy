@@ -13,7 +13,7 @@ auth_classes = [
 ]
 
 
-def detect(username, password=None):
+def detect(username, password=None, proxy=None):
     """Detect the correct auth class to use for a SharePoint login"""
     url = 'https://login.microsoftonline.com/GetUserRealm.srf?login={}&xml=1'
     realm = et.fromstring(requests.get(url.format(escape(username))).text)
@@ -25,7 +25,7 @@ def detect(username, password=None):
             continue
         # Get the login URL from the realm XML
         login_url = _class.get_login(realm)
-        return _class(username, password, login_url=login_url)
+        return _class(username, password, proxy=proxy, login_url=login_url)
 
     auth_type = realm.find('NameSpaceType').text
     raise errors.AuthError(f'\'{auth_type}\' namespace sites are not supported')
