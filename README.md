@@ -121,7 +121,7 @@ proxies = {
    'http': 'http://proxy.example.com:8080',
    'https': 'http://secureproxy.example.com:8090',
 }
-s = sharepy.connect("example.sharepoint.com",proxy=proxies)
+s = sharepy.connect("example.sharepoint.com", proxy=proxies)
 ```
 
 
